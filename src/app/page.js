@@ -1,10 +1,42 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 
 export default function Home() {
     const roleTextRef = useRef(null);
+    const [formData, setFormData] = useState({ name: "", email: "", message: "" });
+    const [status, setStatus] = useState("");
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prev) => ({ ...prev, [name]: value }));
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setStatus("Sending...");
+
+        try {
+            const response = await fetch("/api/contact", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(formData),
+            });
+
+            if (response.ok) {
+                setStatus("Message sent successfully!");
+                setFormData({ name: "", email: "", message: "" });
+            } else {
+                const data = await response.json();
+                setStatus(data.message || "Something went wrong.");
+            }
+        } catch (error) {
+            console.error("Error submitting form:", error);
+            setStatus("Failed to send message.");
+        }
+    };
+
 
     useEffect(() => {
         // Disable context menu
@@ -287,15 +319,37 @@ export default function Home() {
 
                 {/* Contact Section */}
                 <section id="contact" className="page-section contact-bg-img">
-                    <div className="content-wrapper" style={{ justifyContent: "flex-start", paddingLeft: "5%" }}>
+                    <div className="content-wrapper contact-wrapper">
                         <div className="contact-left-align">
-                            <h2 className="section-title" style={{ textAlign: "left" }}>Contact</h2>
+                            <h2 className="section-title contact-title">Contact</h2>
                             <div className="glass-container contact-form-wrapper">
-                                <form className="contact-form">
-                                    <input type="text" placeholder="Name" required />
-                                    <input type="email" placeholder="Email" required />
-                                    <textarea rows="5" placeholder="Message..." required></textarea>
+                                <form className="contact-form" onSubmit={handleSubmit}>
+                                    <input 
+                                        type="text" 
+                                        name="name"
+                                        placeholder="Name" 
+                                        value={formData.name}
+                                        onChange={handleChange}
+                                        required 
+                                    />
+                                    <input 
+                                        type="email" 
+                                        name="email"
+                                        placeholder="Email" 
+                                        value={formData.email}
+                                        onChange={handleChange}
+                                        required 
+                                    />
+                                    <textarea 
+                                        name="message"
+                                        rows="5" 
+                                        placeholder="Message..." 
+                                        value={formData.message}
+                                        onChange={handleChange}
+                                        required
+                                    ></textarea>
                                     <button type="submit" className="btn">Send Message</button>
+                                    {status && <p className="form-status">{status}</p>}
                                 </form>
                                 <div className="social-links" style={{ justifyContent: "center" }}>
                                     <a href="#"><i className="fa-brands fa-github"></i></a>

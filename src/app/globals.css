@@ -404,11 +404,21 @@ body {
     margin-bottom: 15px;
 }
 
+.contact-wrapper {
+    justify-content: flex-start;
+    padding-left: 5%;
+}
+
+.contact-title {
+    text-align: left;
+}
+
 .contact-form {
     display: flex;
     flex-direction: column;
     gap: 15px;
-    width: 400px;
+    width: 100%;
+    max-width: 400px;
 }
 
 .contact-form input,
@@ -445,6 +455,13 @@ body {
 
 .btn:hover {
     opacity: 0.9;
+}
+
+.form-status {
+    margin-top: 10px;
+    font-size: 0.9rem;
+    color: var(--accent-orange);
+    text-align: center;
 }
 
 .social-links {
@@ -510,7 +527,36 @@ body {
 
     .nav-links {
         margin-top: 15px;
-        gap: 15px;
-        font-size: 0.9rem;
+        gap: 10px;
+        font-size: 0.8rem;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .page-section {
+        padding: 0 5%;
+        height: auto;
+        min-height: 100vh;
+        padding-top: 100px; /* Account for navbar */
+        padding-bottom: 50px;
+    }
+
+    .contact-form-wrapper {
+        padding: 20px;
+        width: 100%;
+    }
+
+    .contact-wrapper {
+        justify-content: center;
+        padding-left: 0;
+    }
+
+    .contact-title {
+        text-align: center;
+    }
+
+    .glass-card,
+    .glass-container {
+        padding: 20px;
     }
 }
